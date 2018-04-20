@@ -18,7 +18,7 @@ const { Thead, Tbody, Tr, Th, Td } = ScrollTable;
 
 const cx = lucidClassNames.bind('&-DataTable');
 
-const { any, func, number, object, string, bool, arrayOf } = PropTypes;
+const { any, func, node, number, object, string, bool, arrayOf } = PropTypes;
 
 const DataTable = createClass({
 	displayName: 'DataTable',
@@ -147,7 +147,7 @@ const DataTable = createClass({
 			propName: 'Column',
 			propTypes: {
 				field: string.isRequired,
-				title: string,
+				title: node,
 			},
 		}),
 		ColumnGroup: createClass({
@@ -161,7 +161,7 @@ const DataTable = createClass({
 			},
 			propName: 'ColumnGroup',
 			propTypes: {
-				title: string,
+				title: node,
 			},
 			getDefaultProps: () => ({ align: 'center' }),
 		}),
