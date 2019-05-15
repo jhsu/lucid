@@ -27,6 +27,7 @@ export default class extends React.Component {
 				<SidePanel
 					isExpanded={this.state.isExpanded}
 					onCollapse={this.handleToggle}
+					width={500}
 				>
 					<SidePanel.Header>
 						<strong>Stumptown keytar schlitz</strong>

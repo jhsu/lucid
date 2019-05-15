@@ -112,8 +112,9 @@ class SidePanel extends React.Component {
 								<Button
 									kind='invisible'
 									style={{
-										width: '32px',
-										height: '32px',
+										marginTop: -10,
+										width: 32,
+										height: 32,
 									}}
 								>
 									<CrossIcon
