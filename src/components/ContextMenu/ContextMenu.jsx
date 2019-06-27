@@ -156,26 +156,31 @@ const ContextMenu = createClass({
 	},
 
 	handleAlignment() {
-		if (this.continueAlignment) {
-			if (this.props.isExpanded) {
-				this.alignFlyOut(true);
-			}
+		if (this.continueAlignment && this.props.isExpanded) {
+			this.alignFlyOut(true);
 			window.requestAnimationFrame(this.handleAlignment);
 		}
 	},
 
 	beginAlignment() {
+		_.defer(() => this.alignFlyOut());
 		this.continueAlignment = true;
-		window.requestAnimationFrame(this.handleAlignment);
+		this.handleAlignment();
 	},
 
 	endAlignment() {
 		this.continueAlignment = false;
 	},
 
+	componentWillMount() {
+		this._portalRef = React.createRef();
+		this._targetRef = React.createRef();
+	},
+
 	componentDidMount() {
-		_.defer(() => this.alignFlyOut());
-		this.beginAlignment();
+		if (this.props.isExpanded) {
+			this.beginAlignment();
+		}
 
 		document.body.addEventListener('touchstart', this.handleBodyClick);
 		document.body.addEventListener('click', this.handleBodyClick);
@@ -183,15 +188,14 @@ const ContextMenu = createClass({
 
 	componentWillUnmount() {
 		this.endAlignment();
+		document.body.removeEventListener('touchstart', this.handleBodyClick);
 		document.body.removeEventListener('click', this.handleBodyClick);
 	},
 
 	handleBodyClick(event) {
-		const {
-			props,
-			props: { onClickOut },
-			refs: { flyOutPortal, target },
-		} = this;
+		const { props, props: { onClickOut } } = this;
+		const flyOutPortal = this._portalRef.current;
+		const target = this._targetRef.current;
 
 		if (onClickOut && flyOutPortal) {
 			const flyOutEl = flyOutPortal.portalElement.firstChild;
@@ -210,8 +214,10 @@ const ContextMenu = createClass({
 		}
 	},
 
-	componentWillReceiveProps() {
-		_.defer(() => this.alignFlyOut());
+	componentDidUpdate(prevProps) {
+		if (!prevProps.isExapnded && this.props.isExpanded) {
+			this.beginAlignment();
+		}
 	},
 
 	getFlyoutPosition() {
@@ -222,8 +228,8 @@ const ContextMenu = createClass({
 				flyOutWidth,
 				targetRect: { bottom, left, right, top, width, height },
 			},
-			refs: { flyOutPortal },
 		} = this;
+		const flyOutPortal = this._portalRef.current;
 
 		if (!flyOutPortal) {
 			return {};
@@ -340,7 +346,8 @@ const ContextMenu = createClass({
 	},
 
 	alignFlyOut(doRedunancyCheck = false) {
-		const { refs: { flyOutPortal, target } } = this;
+		const flyOutPortal = this._portalRef.current;
+		const target = this._targetRef.current;
 
 		if (!target || !flyOutPortal) {
 			return;
@@ -366,12 +373,14 @@ const ContextMenu = createClass({
 		}
 
 		const flyOutEl = flyOutPortal.portalElement.firstChild;
-		const { height, width } = flyOutEl.getBoundingClientRect();
-		this.setState({
-			targetRect,
-			flyOutHeight: height,
-			flyOutWidth: width,
-		});
+		if (flyOutEl) {
+			const { height, width } = flyOutEl.getBoundingClientRect();
+			this.setState({
+				targetRect,
+				flyOutHeight: height,
+				flyOutWidth: width,
+			});
+		}
 	},
 
 	render() {
@@ -396,7 +405,7 @@ const ContextMenu = createClass({
 
 		return (
 			<TargetElementType
-				ref="target"
+				ref={this._targetRef}
 				{...omitProps(passThroughs, ContextMenu)}
 				className={cx('&', className)}
 				style={style}
@@ -404,7 +413,7 @@ const ContextMenu = createClass({
 				{targetChildren}
 				{isExpanded ? (
 					<Portal
-						ref="flyOutPortal"
+						ref={this._portalRef}
 						{...flyProps}
 						className={cx(
 							'&-FlyOut',
