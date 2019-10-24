@@ -201,7 +201,7 @@ const DateSelect = createClass({
 		this.props.onNext({ event, props: this.props });
 	},
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.initialMonth = new Date(this.props.initialMonth);
 	},
 

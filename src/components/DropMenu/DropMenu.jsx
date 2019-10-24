@@ -626,12 +626,12 @@ const DropMenu = createClass({
 		);
 	},
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		// preprocess the options data before rendering
 		this.setState(this.getPreprocessedOptionData(this.props));
 	},
 
-	componentWillReceiveProps(nextProps) {
+	UNSAFE_componentWillReceiveProps(nextProps) {
 		// only preprocess options data when it changes (via new props) - better performance than doing this each render
 		this.setState(this.getPreprocessedOptionData(nextProps));
 	},
