@@ -303,7 +303,7 @@ class TextField extends React.Component<
 		(this.nativeElement.current as HTMLElement).focus();
 	};
 
-	componentWillMount(): void {
+	UNSAFE_componentWillMount(): void {
 		this.setState({ isMounted: true });
 	}
 
@@ -311,7 +311,7 @@ class TextField extends React.Component<
 		this.setState({ isMounted: false });
 	}
 
-	componentWillReceiveProps(nextProps: ITextFieldProps): void {
+	UNSAFE_componentWillReceiveProps(nextProps: ITextFieldProps): void {
 		// Allow consumer to optionally control state
 		if (_.has(nextProps, 'value')) {
 			if (this.state.isHolding) {

@@ -101,7 +101,7 @@ class Collapsible extends React.Component<
 		maxHeight: 0,
 	};
 
-	componentWillMount(): void {
+	UNSAFE_componentWillMount(): void {
 		this.isAnimated = false;
 		this.delayTimer = null;
 	}
