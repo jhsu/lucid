@@ -37,7 +37,7 @@ module.exports = {
 		],
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', '.ts', '.tsx'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx', '.less'],
 	},
 	devtool: isProduction ? false : 'source-map',
 	externals: {
