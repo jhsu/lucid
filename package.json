@@ -14,6 +14,7 @@
     "url": "https://github.com/appnexus/lucid.git"
   },
   "scripts": {
+    "build": "npm-run-all --parallel build:js build:modules:* build:bundle:*",
     "build:bundle:development": "NODE_ENV=development webpack --config webpack.config.bundle.js",
     "build:bundle:minified": "NODE_ENV=production webpack --config webpack.config.bundle.js",
     "build:docs": "rm -rf ./dist/docs && NODE_DEST_ENV=docs build-storybook --docs -s ./docs/public -o ./dist/docs",
